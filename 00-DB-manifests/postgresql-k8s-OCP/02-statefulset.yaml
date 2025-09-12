@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: postgresql-demo
+  labels:
+    app: postgresql-demo
+    app.openshift.io/runtime: postgresql
+
+spec:
+  serviceName: postgresql-demo
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql-demo
+  template:
+    metadata:
+      labels:
+        app: postgresql-demo
+        
+    spec:
+      securityContext:
+        fsGroup: 26 
+      containers:
+        - name: postgresql-demo
+          image: registry.redhat.io/rhel9/postgresql-16
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-demo-configs
+                  key: POSTGRESQL_USER
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-demo-configs
+                  key: POSTGRESQL_PASSWORD
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-demo-configs
+                  key: POSTGRESQL_DATABASE
+          resources:
+            limits:
+              cpu: 250m
+              memory: 450Mi
+            requests:
+              cpu: 200m
+              memory: 420Mi
+          volumeMounts:
+            - name: postgresql-data
+              mountPath: /var/lib/pgsql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: postgresql-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi

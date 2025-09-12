@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: quarkus-jvm-helloworld
+  labels:
+    app: quarkus-jvm-helloworld
+    app.kubernetes.io/component: quarkus-jvm-helloworld
+    app.kubernetes.io/instance: quarkus-jvm-helloworld
+    app.kubernetes.io/name: quarkus-jvm-helloworld
+    app.kubernetes.io/part-of: java-apps
+    app.openshift.io/runtime: quarkus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quarkus-jvm-helloworld
+  template:
+    metadata:
+      labels:
+        app: quarkus-jvm-helloworld
+        deployment: quarkus-jvm-helloworld
+    spec:
+      containers:
+        - name: quarkus-jvm-helloworld
+          image: 'quarkus-jvm-helloworld:latest'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: APP_TITLE
+              valueFrom:
+                secretKeyRef:
+                  name: quarkus-jvm-helloworld
+                  key: APP_TITLE
+          resources:
+            limits:
+              cpu: 100m
+              memory: 250Mi
+            requests:
+              cpu: 100m
+              memory: 220Mi

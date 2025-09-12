@@ -1,0 +1,34 @@
+{{- if .Values.route.enabled -}}
+
+{{- $fullName := include "quarkus-jvm-helloworld.fullname" . -}}
+{{- $svcName := include "quarkus-jvm-helloworld.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ $fullName }}
+  
+  labels:
+    {{- include "quarkus-jvm-helloworld.labels" . | nindent 4 }}
+
+spec:
+  {{- if .Values.route.subdomain }}
+  subdomain: {{ .Values.route.hostname }}
+  {{- end }}
+  
+  to:
+    kind: Service
+    name: {{ $svcName }}
+    weight: 100
+  port:
+    targetPort: {{ $svcPort }}-{{ .Values.service.portName }}
+
+  {{- if .Values.route.tls }}
+  tls:
+    termination: {{ .Values.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.route.tls.terminationPolicy }}
+  wildcardPolicy: {{ .Values.route.tls.wildcardPolicy }}
+  {{- end }}
+
+{{- end }}

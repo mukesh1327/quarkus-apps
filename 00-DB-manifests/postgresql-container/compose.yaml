@@ -1,0 +1,24 @@
+---
+services:
+  postgres:
+    image: registry.redhat.io/rhel9/postgresql-16
+    container_name: quarkus_apps_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRESQL_USER: quarkususer
+      POSTGRESQL_PASSWORD: flights123
+      POSTGRESQL_DB: quarkususer
+    volumes:
+      - postgres-data:/var/lib/pgsql/data
+    networks:
+      - quarkus-apps
+
+networks:
+  quarkus-apps:
+    driver: bridge
+
+volumes:  
+  postgres-data:
+    driver: local

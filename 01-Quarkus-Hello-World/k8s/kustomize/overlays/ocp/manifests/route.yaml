@@ -1,0 +1,24 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: quarkus-jvm-hello-app
+  labels:
+    app: quarkus-jvm-hello-app
+    app.kubernetes.io/component: quarkus-jvm-hello-app
+    app.kubernetes.io/instance: quarkus-jvm-hello-app
+    app.kubernetes.io/name: quarkus-jvm-hello-app
+    app.kubernetes.io/part-of: java-apps
+    app.openshift.io/runtime: quarkus
+spec:
+  # host: 
+  subdomain: quarkus-jvm-hello-app
+  to:
+    kind: Service
+    name: quarkus-jvm-hello-app
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
