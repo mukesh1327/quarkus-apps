@@ -2,7 +2,7 @@
 
 {{- $fullName := include "quarkus-jvm-helloworld.fullname" . -}}
 {{- $svcName := include "quarkus-jvm-helloworld.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
+{{- $svcPort := .Values.service.targetPortName -}}
 
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -22,7 +22,7 @@ spec:
     name: {{ $svcName }}
     weight: 100
   port:
-    targetPort: {{ $svcPort }}-{{ .Values.service.portName }}
+    targetPort: {{ $svcPort }}
 
   {{- if .Values.route.tls }}
   tls:

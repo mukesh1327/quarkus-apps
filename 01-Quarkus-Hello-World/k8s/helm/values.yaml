@@ -45,6 +45,7 @@ service:
   type: ClusterIP
   port: 8080
   portName: http
+  targetPortName: http
 
 
 route:
