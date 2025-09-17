@@ -1,5 +1,15 @@
 # Java Quarkus hello world - Noventiq value point
 
+## Testing in local
+
+./mvnw test
+
+syft dir:. -o cyclonedx-json > sbom.cdx.json
+
+grype sbom:sbom.cdx.json -o table --fail-on high
+
+
+
 __A demo hello world java quarkus application__
 
 ___Running on port :___ 8080
