@@ -4,8 +4,13 @@
 
 ./mvnw test
 
+<!-- registry.redhat.io/rh-syft-tech-preview/syft-rhel9@sha256:15ed82f0b5311a570ccb8ea02135d9776c6d61e545c51b256b3fc5b5db20ba67 # 1.29.0 -->
+<!-- https://github.com/anchore/syft/releases/ -->
 syft dir:. -o cyclonedx-json > sbom.cdx.json
 
+
+<!-- docker.io/anchore/grype:latest -->
+<!-- https://github.com/anchore/grype/releases -->
 grype sbom:sbom.cdx.json -o table --fail-on high
 
 
@@ -68,3 +73,9 @@ APP_TITLE=string
 <u>**_Run as Native-micro_**</u>
 
 > oc apply -f ./k8s-manifests/native-micro -n demo-namespace
+
+
+## Test image
+
+<!-- https://mirror.openshift.com/pub/rhacs/assets/latest/bin/Windows/ -->
+
