@@ -1,4 +1,4 @@
-package org.cloudxplorer13;
+package in.cloudxplorer13;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
