@@ -8,7 +8,7 @@ import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/login")
-public class LoginResource {
+public class HelloWorld {
 
     // Simple hardcoded username/password
     private static final String VALID_USER = "admin";
