@@ -1,43 +1,59 @@
 package in.cloudxplorer13;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/")
-public class HelloWorld {
-    // private static final String IMAGE_URL = "/images/noventiq-vp.png";
+@Path("/login")
+public class LoginResource {
 
-    @ConfigProperty(name = "app.title")
-    String appTitle;
+    // Simple hardcoded username/password
+    private static final String VALID_USER = "admin";
+    private static final String VALID_PASS = "password123";
 
-    @ConfigProperty(name = "app.image")
-    String welcomeImg;
-
-    // @GET
-    // @Produces(MediaType.TEXT_PLAIN)
-    // public String helloWorld() {
-    //     return "Hello, World! Check with endpoint /noventiq-vp-hello";
-    // }
-
-    public String getImageUrl() {
-        return welcomeImg;
-    }
-
+    // STEP 1: Show login page (GET)
     @GET
-    @Path("/")
     @Produces(MediaType.TEXT_HTML)
-    public String getImageHtml() {
+    public String showLoginPage() {
         return "<html>" +
-                "<head><title>Image Viewer</title></head>" +
+                "<head><title>Login</title></head>" +
                 "<body>" +
-                "<h1>" + appTitle + "</h1>" +
-                "<h2>App modernization</h2>" +
-                "<img src='" + welcomeImg + "' alt='Image' width='500'/>" +
+                "<h1>Login Page</h1>" +
+                "<form method='POST' action='/login/submit'>" +
+                "Username: <input type='text' name='username'/><br><br>" +
+                "Password: <input type='password' name='password'/><br><br>" +
+                "<input type='submit' value='Login'/>" +
+                "</form>" +
                 "</body>" +
                 "</html>";
+    }
+
+    // STEP 2: Handle login submission (POST)
+    @POST
+    @Path("/submit")
+    @Produces(MediaType.TEXT_HTML)
+    public String handleLogin(
+            @FormParam("username") String username,
+            @FormParam("password") String password) {
+
+        if (username == null || password == null) {
+            return "<html><body><h2>Invalid input!</h2></body></html>";
+        }
+
+        if (username.equals(VALID_USER) && password.equals(VALID_PASS)) {
+            return "<html><body>" +
+                    "<h1>Login Successful!</h1>" +
+                    "<p>Welcome, " + username + ".</p>" +
+                    "</body></html>";
+        } else {
+            return "<html><body>" +
+                    "<h1>Login Failed!</h1>" +
+                    "<p>Incorrect username or password.</p>" +
+                    "<a href='/login'>Try Again</a>" +
+                    "</body></html>";
+        }
     }
 }
